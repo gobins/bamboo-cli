@@ -11,6 +11,8 @@ type credentials struct {
 	username string
 	password string
 	baseurl  string
+	apiuri   string
+	token    string
 }
 
 func getAuthToken(cred credentials) string {
