@@ -8,10 +8,9 @@ func TestGetAuthToken(t *testing.T) {
 	cred.baseurl = "http://localhost:8085"
 	cred.username = "admin"
 	cred.password = "password"
-
 	resp := getAuthToken(*cred)
 
-	if resp == nil {
+	if resp == "" {
 		t.Error("Error")
 	}
 }

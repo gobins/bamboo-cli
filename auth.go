@@ -1,7 +1,6 @@
 package bamboocli
 
 import (
-	"bufio"
 	"net/http"
 	"strings"
 
@@ -14,8 +13,9 @@ type credentials struct {
 	baseurl  string
 }
 
-func getAuthToken(cred credentials) *http.Response {
+func getAuthToken(cred credentials) string {
 	log.Debug("basicAuth to bamboo server")
+	var token []string
 	client := &http.Client{}
 	req, _ := http.NewRequest("GET", cred.baseurl, nil)
 	req.SetBasicAuth(cred.username, cred.password)
@@ -24,23 +24,16 @@ func getAuthToken(cred credentials) *http.Response {
 		log.Error("Authentication Error")
 	}
 	log.Debug(resp)
-	// log.Info(resp.Header)
-	// for k, v := range resp.Header {
-	// 	log.Println("key:", k, "value:", v)
-	// }
-	log.Info(resp.Header.Get("Set-Cookie value"))
-	reader := bufio.NewReader(strings.NewReader(resp.Header.Get("Set-Cookie")))
+	cookie := resp.Header.Get("Set-Cookie")
+	if len(cookie) != 0 {
+		splitcookie := strings.Split(cookie, ";")
 
-	logReq, err := http.ReadRequest(reader)
-	if err != nil {
-		log.Fatal(err)
+		for _, item := range splitcookie {
+			if strings.Contains(item, "atl.xsrf.token") {
+				token = strings.Split(item, "=")
+			}
+		}
 	}
 
-	log.Println(logReq.Header)
-	// cookies := resp.Cookies()
-	// for _, cookie := range cookies {
-	// 	log.Info(cookie)
-	// }
-
-	return resp
+	return token[1]
 }
