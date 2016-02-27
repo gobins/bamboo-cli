@@ -57,3 +57,7 @@ func getAllProjects(cred credentials) []project {
 	}
 	return pr.Projects.Projects
 }
+
+func getAllPlans(cred credentials) {
+
+}
