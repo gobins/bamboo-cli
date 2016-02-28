@@ -8,9 +8,28 @@ import (
 )
 
 type project struct {
-	Name string `json:"name"`
-	Key  string `json:"key"`
-	Link Link   `json:"link"`
+	Name  string `json:"name"`
+	Key   string `json:"key"`
+	Link  Link   `json:"link"`
+	Plans plans  `json:"plans"`
+}
+
+type plans struct {
+	Plan []plan `json:"plan"`
+}
+
+type plan struct {
+	Name      string  `json:"name"`
+	ShortName string  `json:"shortName"`
+	ShortKey  string  `json:"shortKey"`
+	Enabled   string  `json:"enabled"`
+	Link      Link    `json:"link"`
+	Key       string  `json:"key"`
+	PlanKey   planKey `json:"planKey"`
+}
+
+type planKey struct {
+	Key string `json:"key"`
 }
 
 //Link attribute which holds the url to the object
@@ -33,7 +52,9 @@ func getAllProjects(cred credentials) []project {
 	if cred.token == "" {
 		cred.token = getAuthToken(cred)
 	}
-	cred.apiuri = "/rest/api/latest/project.json"
+	if cred.apiuri == "" {
+		cred.apiuri = "/rest/api/latest/project.json"
+	}
 
 	resp := httpclient(cred, "GET")
 	var pr AllProjects
@@ -48,12 +69,23 @@ func getAllProjects(cred credentials) []project {
 	return pr.Projects.Projects
 }
 
-// func getAllPlans(cred credentials, plan) {
-//   log.Debug("Retrieving all plans in the project")
-// 	if cred.token == "" {
-// 		cred.token = getAuthToken(cred)
-// 	}
-// 	cred.apiuri = "/rest/api/latest/project"
-//
-//
-// }
+func getAllPlansInProject(cred credentials, planName string) {
+	log.Debug("Retrieving all plans in the project")
+	if cred.token == "" {
+		cred.token = getAuthToken(cred)
+	}
+	cred.apiuri = "/rest/api/latest/project.json?expand=projects.project.plans"
+
+	resp := httpclient(cred, "GET")
+
+	var pr AllProjects
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+
+	if err != nil {
+		log.Error("Error reading response body")
+	}
+
+	json.Unmarshal(body, &pr)
+	log.Info(pr.Projects.Projects)
+}
