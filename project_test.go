@@ -9,11 +9,11 @@ func TestGetAllProjects(t *testing.T) {
 	cred.username = "admin"
 	cred.password = "password"
 	cred.apiuri = "/rest/api/latest/project"
-	token := getAuthToken(*cred)
 
-	if token == "" {
-		t.Error("Error")
-	}
 	getAllProjects(*cred)
+
+	// if len(resp) == 0 {
+	// 	t.Error("Error")
+	// }
 
 }

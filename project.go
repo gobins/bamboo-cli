@@ -1,63 +1,59 @@
 package bamboocli
 
 import (
-	"encoding/xml"
+	"encoding/json"
 	"io/ioutil"
-	"net/http"
 
 	log "github.com/Sirupsen/logrus"
 )
 
 type project struct {
-	Name string `xml:"name,attr"`
-	Key  string `xml:"key,attr"`
-	Link Link   `xml:"link"`
+	Name string `json:"name"`
+	Key  string `json:"key"`
+	Link Link   `json:"link"`
 }
 
 //Link attribute which holds the url to the object
 type Link struct {
-	Href string `xml:"href,attr"`
-}
-
-//AllProjects parent element for all projects
-type AllProjects struct {
-	Projects Projects `xml:"projects"`
-	Link     Link     `xml:"link"`
+	Href string `json:"href"`
 }
 
 //Projects containing multiple project definition
 type Projects struct {
-	Projects []project `xml:"project"`
+	Projects []project `json:"project"`
 }
 
-// type Allprojects struct {
-// 	//XMLName  xml.Name  `xml:projects"`
-// 	projects []project `xml:project"`
-// }
+//AllProjects parent element for all projects
+type AllProjects struct {
+	Projects Projects `json:"projects"`
+}
 
 func getAllProjects(cred credentials) []project {
 	log.Debug("Retrieving all projects")
-	token := getAuthToken(cred)
-	client := &http.Client{}
-	req, _ := http.NewRequest("GET", cred.baseurl+cred.apiuri, nil)
-	tokencookie := &http.Cookie{Name: "atl.xsrf.token", Value: token, HttpOnly: false}
-	req.AddCookie(tokencookie)
-	resp, err := client.Do(req)
-	var pr AllProjects
-	if err != nil {
-		log.Error("Error retrieving projects")
-	} else {
-		defer resp.Body.Close()
-		body, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			log.Error("Error reading response body")
-		}
-		log.Debug(string(body))
-		xml.Unmarshal(body, &pr)
+	if cred.token == "" {
+		cred.token = getAuthToken(cred)
 	}
+	cred.apiuri = "/rest/api/latest/project.json"
+
+	resp := httpclient(cred, "GET")
+	var pr AllProjects
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Error("Error reading response body")
+	}
+
+	json.Unmarshal(body, &pr)
+	log.Debug(pr.Projects.Projects)
 	return pr.Projects.Projects
 }
 
-func getAllPlans(cred credentials) {
-
-}
+// func getAllPlans(cred credentials, plan) {
+//   log.Debug("Retrieving all plans in the project")
+// 	if cred.token == "" {
+// 		cred.token = getAuthToken(cred)
+// 	}
+// 	cred.apiuri = "/rest/api/latest/project"
+//
+//
+// }
