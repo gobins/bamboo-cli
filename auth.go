@@ -17,7 +17,7 @@ type credentials struct {
 
 func getAuthToken(cred credentials) string {
 	log.Debug("basicAuth to bamboo server")
-	var token []string
+	var token string
 	client := &http.Client{}
 	req, _ := http.NewRequest("GET", cred.baseurl, nil)
 	req.SetBasicAuth(cred.username, cred.password)
@@ -25,17 +25,16 @@ func getAuthToken(cred credentials) string {
 	if err != nil {
 		log.Error("Authentication Error")
 	}
-	log.Debug(resp)
-	cookie := resp.Header.Get("Set-Cookie")
-	if len(cookie) != 0 {
-		splitcookie := strings.Split(cookie, ";")
-
-		for _, item := range splitcookie {
-			if strings.Contains(item, "atl.xsrf.token") {
-				token = strings.Split(item, "=")
+	//log.Info(resp)
+	cookies := resp.Cookies()
+	log.Debug(cookies)
+	if len(cookies) != 0 {
+		for _, cookie := range cookies {
+			if strings.Contains(cookie.Name, "atl.xsrf.token") {
+				token = cookie.Value
 			}
 		}
 	}
-
-	return token[1]
+	log.Debug("Token:", token)
+	return token
 }
