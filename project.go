@@ -2,6 +2,7 @@ package bamboocli
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 
 	log "github.com/Sirupsen/logrus"
@@ -15,7 +16,7 @@ type project struct {
 }
 
 type plans struct {
-	Plan []plan `json:"plan"`
+	Plans []plan `json:"plan"`
 }
 
 type plan struct {
@@ -47,6 +48,13 @@ type AllProjects struct {
 	Projects Projects `json:"projects"`
 }
 
+func js(what string, data interface{}) {
+	final_struct := make(map[string]interface{})
+	final_struct[what] = data
+	js, _ := json.MarshalIndent(final_struct, "", "  ")
+	fmt.Println(string(js))
+}
+
 func getAllProjects(cred credentials) []project {
 	log.Debug("Retrieving all projects")
 	if cred.token == "" {
@@ -63,13 +71,12 @@ func getAllProjects(cred credentials) []project {
 	if err != nil {
 		log.Error("Error reading response body")
 	}
-
 	json.Unmarshal(body, &pr)
-	log.Debug(pr.Projects.Projects)
+	//js("projects", pr.Projects.Projects)
 	return pr.Projects.Projects
 }
 
-func getAllPlansInProject(cred credentials, planName string) {
+func getAllPlansInProject(cred credentials, projectName string) plans {
 	log.Debug("Retrieving all plans in the project")
 	if cred.token == "" {
 		cred.token = getAuthToken(cred)
@@ -85,7 +92,19 @@ func getAllPlansInProject(cred credentials, planName string) {
 	if err != nil {
 		log.Error("Error reading response body")
 	}
-
 	json.Unmarshal(body, &pr)
-	log.Info(pr.Projects.Projects)
+
+	var allplans plans
+	var projFound bool
+	for _, proj := range pr.Projects.Projects {
+		if proj.Name == projectName || proj.Key == projectName {
+			allplans = proj.Plans
+			projFound = true
+			break
+		}
+	}
+	if !projFound {
+		log.Info("Matching plan with name or key for found for: ", projectName)
+	}
+	return allplans
 }

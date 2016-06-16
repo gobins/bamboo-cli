@@ -3,31 +3,24 @@ package bamboocli
 import "testing"
 
 func TestGetAllProjects(t *testing.T) {
-	// cred := new(credentials)
+	cred := new(credentials)
 
-	// cred.baseurl = "http://192.168.99.100:8085"
-	// cred.username = "admin"
-	// cred.password = "password"
-	// cred.apiuri = "/rest/api/latest/project"
+	cred.baseurl = "http://192.168.99.100:8085"
+	cred.username = "admin"
+	cred.password = "password"
+	cred.apiuri = "/rest/api/latest/project.json"
 
-	// resp := getAllProjects(*cred)
-	// if len(resp) == 0 {
-	// 	t.Error("Error")
-	// }
+	getAllProjects(*cred)
 
 }
 
 func TestGetAllPlans(t *testing.T) {
-	// cred := new(credentials)
+	cred := new(credentials)
 
-	// cred.baseurl = "http://192.168.99.100:8085"
-	// cred.username = "admin"
-	// cred.password = "password"
-	// cred.apiuri = "/rest/api/latest/project.json"
+	cred.baseurl = "http://192.168.99.100:8085"
+	cred.username = "admin"
+	cred.password = "password"
 
-	// getAllPlansInProject(*cred, "Test")
-	// if len(resp) == 0 {
-	// 	t.Error("Error")
-	// }
+	getAllPlansInProject(*cred, "First Project")
 
 }
