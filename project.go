@@ -79,5 +79,6 @@ func getAllPlansInProject(cred credentials, projectName string) plans {
 	if !projFound {
 		log.Info("Matching plan with name or key for found for: ", projectName)
 	}
+	js("plans", allplans)
 	return allplans
 }
