@@ -2,7 +2,6 @@ package bamboocli
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 
 	log "github.com/Sirupsen/logrus"
@@ -27,13 +26,6 @@ type Projects struct {
 //AllProjects parent element for all projects
 type AllProjects struct {
 	Projects Projects `json:"projects"`
-}
-
-func js(what string, data interface{}) {
-	final_struct := make(map[string]interface{})
-	final_struct[what] = data
-	js, _ := json.MarshalIndent(final_struct, "", "  ")
-	fmt.Println(string(js))
 }
 
 func getAllProjects(cred credentials) []project {
