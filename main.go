@@ -65,7 +65,7 @@ func main() {
 			Flags: []cli.Flag{
 				cli.StringFlag{
 					Name:        "key",
-					Usage:       "Name or Key of the Project",
+					Usage:       "Key of the Project",
 					Destination: &plan_key,
 				},
 			},

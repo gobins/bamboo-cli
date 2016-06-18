@@ -21,6 +21,6 @@ func TestGetAllPlans(t *testing.T) {
 	cred.username = "admin"
 	cred.password = "password"
 
-	getAllPlansInProject(*cred, "First Project")
+	getAllPlansInProject(*cred, "FP")
 
 }

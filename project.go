@@ -54,11 +54,11 @@ func getAllPlansInProject(cred credentials, projectName string) plans {
 	if cred.token == "" {
 		cred.token = getAuthToken(cred)
 	}
-	cred.apiuri = "/rest/api/latest/project.json?expand=projects.project.plans"
+	cred.apiuri = "/rest/api/latest/project/" + projectName + ".json?expand=plans.plan"
 
 	resp := httpclient(cred, "GET")
 
-	var pr AllProjects
+	var pr project
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 
@@ -66,19 +66,5 @@ func getAllPlansInProject(cred credentials, projectName string) plans {
 		log.Error("Error reading response body")
 	}
 	json.Unmarshal(body, &pr)
-
-	var allplans plans
-	var projFound bool
-	for _, proj := range pr.Projects.Projects {
-		if proj.Name == projectName || proj.Key == projectName {
-			allplans = proj.Plans
-			projFound = true
-			break
-		}
-	}
-	if !projFound {
-		log.Info("Matching plan with name or key for found for: ", projectName)
-	}
-	js("plans", allplans)
-	return allplans
+	return pr.Plans
 }
