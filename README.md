@@ -18,7 +18,6 @@ bamboocli --username admin --password password --url "http://192.168.99.100:8085
 | Second Project | SP  | http://192.168.99.100:8085/rest/api/latest/project/SP |
 +----------------+-----+-------------------------------------------------------+
 ```
-```
 
 ## Contributing
 -----------------------------
