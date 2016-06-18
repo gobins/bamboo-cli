@@ -1,4 +1,4 @@
-package bamboocli
+package main
 
 import (
 	"net/http"
