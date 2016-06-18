@@ -19,25 +19,6 @@ type plans struct {
 	Plans []plan `json:"plan"`
 }
 
-type plan struct {
-	Name      string  `json:"name"`
-	ShortName string  `json:"shortName"`
-	ShortKey  string  `json:"shortKey"`
-	Enabled   string  `json:"enabled"`
-	Link      Link    `json:"link"`
-	Key       string  `json:"key"`
-	PlanKey   planKey `json:"planKey"`
-}
-
-type planKey struct {
-	Key string `json:"key"`
-}
-
-//Link attribute which holds the url to the object
-type Link struct {
-	Href string `json:"href"`
-}
-
 //Projects containing multiple project definition
 type Projects struct {
 	Projects []project `json:"project"`
