@@ -66,6 +66,14 @@ type branch struct {
 	Key       string `json:"key"`
 }
 
+type postresp struct {
+	PlanKey        string `json:"planKey"`
+	BuildNumber    int64  `json:"buildNumber"`
+	BuildResultKey string `json:"buildResultKey"`
+	TriggerReason  string `json:"triggerReason"`
+	Link           Link   `json:"link"`
+}
+
 func js(what string, data interface{}) {
 	final_struct := make(map[string]interface{})
 	final_struct[what] = data
