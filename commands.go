@@ -23,19 +23,37 @@ func CallGetAllProjects(username, password, bamboo_url string) {
 	fmt.Println(table.Render())
 }
 
-func CallGetAllPlansInProject(username, password, bamboo_url, plan_name string) {
+func CallGetAllPlansInProject(username, password, bamboo_url, project_name string) {
 	cred := new(credentials)
 
 	cred.baseurl = bamboo_url
 	cred.username = username
 	cred.password = password
 
-	allPlans := getAllPlansInProject(*cred, plan_name)
+	allPlans := getAllPlansInProject(*cred, project_name)
 	table := termtables.CreateTable()
-	table.AddHeaders("Name", "Active", "Building", "Stages", "Branches", "Link")
+	table.AddHeaders("Name", "Key", "Active", "Building", "Stages", "Branches", "Link")
 	if len(allPlans.Plans) != 0 {
 		for _, pl := range allPlans.Plans {
-			table.AddRow(pl.BuildName, pl.IsActive, pl.IsBuilding, pl.Stages.Size, pl.Branches.Size, pl.Link.Href)
+			table.AddRow(pl.BuildName, pl.Key, pl.IsActive, pl.IsBuilding, pl.Stages.Size, pl.Branches.Size, pl.Link.Href)
+		}
+	}
+	fmt.Println(table.Render())
+}
+
+func CallGetAllBranches(username, password, bamboo_url, plan_key string) {
+	cred := new(credentials)
+
+	cred.baseurl = bamboo_url
+	cred.username = username
+	cred.password = password
+
+	allBranches := getAllBranches(*cred, plan_key)
+	table := termtables.CreateTable()
+	table.AddHeaders("Name", "Enabled", "Key", "Link")
+	if len(allBranches.AllBranch) != 0 {
+		for _, br := range allBranches.AllBranch {
+			table.AddRow(br.Shortname, br.Enabled, br.Key, br.Link.Href)
 		}
 	}
 	fmt.Println(table.Render())

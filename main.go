@@ -16,6 +16,7 @@ func main() {
 	var password string
 	var bamboo_url string
 	var plan_key string
+	var project_key string
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:        "username",
@@ -66,6 +67,41 @@ func main() {
 				cli.StringFlag{
 					Name:        "key",
 					Usage:       "Key of the Project",
+					Destination: &project_key,
+				},
+			},
+			Action: func(C *cli.Context) {
+				var errorFlag bool
+				if username == "" {
+					fmt.Println("username is required")
+					errorFlag = true
+				}
+				if password == "" {
+					fmt.Println("password is required")
+					errorFlag = true
+				}
+				if bamboo_url == "" {
+					fmt.Println("url is required")
+					errorFlag = true
+				}
+				if project_key == "" {
+					fmt.Println("Project Key is required")
+					errorFlag = true
+				}
+				if errorFlag == true {
+					os.Exit(1)
+				}
+				log.Debug("Calling function CallGetAllPlansInProject")
+				CallGetAllPlansInProject(username, password, bamboo_url, project_key)
+			},
+		},
+		{
+			Name:  "get-branches",
+			Usage: "Lists all branches in a plan",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:        "key",
+					Usage:       "Key of the Plan",
 					Destination: &plan_key,
 				},
 			},
@@ -84,14 +120,14 @@ func main() {
 					errorFlag = true
 				}
 				if plan_key == "" {
-					fmt.Println("Plan name or Plan Key is required")
+					fmt.Println("Plan Key is required")
 					errorFlag = true
 				}
 				if errorFlag == true {
 					os.Exit(1)
 				}
-				log.Debug("Calling function CallGetAllPlansInProject")
-				CallGetAllPlansInProject(username, password, bamboo_url, plan_key)
+				log.Debug("Calling function CallGetAllBranches")
+				CallGetAllBranches(username, password, bamboo_url, plan_key)
 			},
 		},
 	}

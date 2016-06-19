@@ -6,28 +6,6 @@ import (
 	"io/ioutil"
 )
 
-type plan struct {
-	Name                      string   `json:"name"`
-	ProjectKey                string   `json:"projectKey"`
-	ProjectName               string   `json:"projectName"`
-	BuildName                 string   `json:"buildName"`
-	Key                       string   `json:"key"`
-	Link                      Link     `json:"link"`
-	IsActive                  bool     `json:"isActive"`
-	IsBuilding                bool     `json:"isBuilding"`
-	AverageBuildTimeInSeconds int64    `json:"averageBuildTimeInSeconds"`
-	Stages                    stages   `json:"stages"`
-	Branches                  branches `json:"branches"`
-}
-
-type stages struct {
-	Size int64 `json:"size"`
-}
-
-type branches struct {
-	Size int64 `json:"size"`
-}
-
 func describePlan(cred credentials, planKey string) plan {
 	log.Debug("Retrieving plan details for key: ", planKey)
 	if cred.token == "" {

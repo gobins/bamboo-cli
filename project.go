@@ -7,27 +7,6 @@ import (
 	log "github.com/Sirupsen/logrus"
 )
 
-type project struct {
-	Name  string `json:"name"`
-	Key   string `json:"key"`
-	Link  Link   `json:"link"`
-	Plans plans  `json:"plans"`
-}
-
-type plans struct {
-	Plans []plan `json:"plan"`
-}
-
-//Projects containing multiple project definition
-type Projects struct {
-	Projects []project `json:"project"`
-}
-
-//AllProjects parent element for all projects
-type AllProjects struct {
-	Projects Projects `json:"projects"`
-}
-
 func getAllProjects(cred credentials) []project {
 	log.Debug("Retrieving all projects")
 	if cred.token == "" {
