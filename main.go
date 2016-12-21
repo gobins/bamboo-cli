@@ -98,7 +98,7 @@ func main() {
 					errorFlag = true
 				}
 				if project_key == "" {
-					fmt.Println("Project Key is required")
+					fmt.Println("key is required")
 					errorFlag = true
 				}
 				if errorFlag == true {

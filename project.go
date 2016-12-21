@@ -32,7 +32,7 @@ func getAllPlansInProject(cred credentials, projectName string) plans {
 	if cred.token == "" {
 		cred.token = getAuthToken(cred)
 	}
-	cred.apiuri = "/rest/api/latest/project/" + projectName + ".json?expand=plans.plan"
+	cred.apiuri = "/rest/api/latest/project/" + projectName + ".json?expand=plans.plan&max-results=500"
 
 	resp := httpclient(cred, "GET")
 

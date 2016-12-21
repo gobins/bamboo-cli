@@ -11,7 +11,7 @@ func describePlan(cred credentials, planKey string) plan {
 	if cred.token == "" {
 		cred.token = getAuthToken(cred)
 	}
-	cred.apiuri = "/rest/api/latest/plan/" + planKey + ".json"
+	cred.apiuri = "/rest/api/latest/plan/" + planKey + ".json?max-results=500"
 
 	resp := httpclient(cred, "GET")
 
