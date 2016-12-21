@@ -25,7 +25,6 @@ func getAuthToken(cred credentials) string {
 	if err != nil {
 		log.Error("Authentication Error")
 	}
-	//log.Info(resp)
 	cookies := resp.Cookies()
 	log.Debug(cookies)
 	if len(cookies) != 0 {

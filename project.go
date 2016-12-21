@@ -13,7 +13,7 @@ func getAllProjects(cred credentials) []project {
 		cred.token = getAuthToken(cred)
 	}
 	if cred.apiuri == "" {
-		cred.apiuri = "/rest/api/latest/project.json"
+		cred.apiuri = "/rest/api/latest/project.json?max-results=500"
 	}
 
 	resp := httpclient(cred, "GET")
@@ -24,7 +24,6 @@ func getAllProjects(cred credentials) []project {
 		log.Error("Error reading response body")
 	}
 	json.Unmarshal(body, &pr)
-	//js("projects", pr.Projects.Projects)
 	return pr.Projects.Projects
 }
 

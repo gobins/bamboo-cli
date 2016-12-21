@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	log "github.com/Sirupsen/logrus"
-	"github.com/codegangsta/cli"
+	"gopkg.in/urfave/cli.v1"
 	"os"
 )
 
@@ -17,6 +17,8 @@ func main() {
 	var bamboo_url string
 	var plan_key string
 	var project_key string
+	var debug bool
+
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:        "username",
@@ -33,6 +35,11 @@ func main() {
 			Usage:       "url for bamboo",
 			Destination: &bamboo_url,
 		},
+		cli.BoolFlag{
+			Name:        "debug",
+			Usage:       "Set debug to see debug logs",
+			Destination: &debug,
+		},
 	}
 
 	app.Commands = []cli.Command{
@@ -40,6 +47,9 @@ func main() {
 			Name:  "get-projects",
 			Usage: "Lists all projects",
 			Action: func(C *cli.Context) {
+				if debug {
+					log.SetLevel(log.DebugLevel)
+				}
 				var errorFlag bool
 				if username == "" {
 					fmt.Println("username is required")
@@ -72,6 +82,9 @@ func main() {
 			},
 			Action: func(C *cli.Context) {
 				var errorFlag bool
+				if debug {
+					log.SetLevel(log.DebugLevel)
+				}
 				if username == "" {
 					fmt.Println("username is required")
 					errorFlag = true
@@ -107,6 +120,9 @@ func main() {
 			},
 			Action: func(C *cli.Context) {
 				var errorFlag bool
+				if debug {
+					log.SetLevel(log.DebugLevel)
+				}
 				if username == "" {
 					fmt.Println("username is required")
 					errorFlag = true
